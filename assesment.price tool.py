@@ -53,37 +53,42 @@ def calculate_unit_price(weight_kg, cost):
     return cost / weight_kg
 
 
+# This converts grams to kilograms or millilitres to litres
 def grams_to_kg(grams):
     return grams / 1000
 
+# Function to convert millilitres to litres
+def ml_to_litres(ml):
+    return ml / 1000
 
-def numb_check(prompt, allow_empty=False):
-    """Checks users enter an integer that is more than zero (or the 'xxx' exit code)"""
 
-    error = "Oops - please enter a integer more than zero."
+def numb_check(prompt, allow_exit=True):
+    """
+    Checks that the user enters a number more than 0.
+    Allows 'xxx' as an exit code if allow_exit is True.
+    """
+
+    error = "❌ Please enter a number more than zero."
 
     while True:
-        response = input(prompt).lower()  # Changed 'question' to 'prompt'
+        response = input(prompt).lower()
 
-        # check for the exit code
-        if response == "xxx":
+        # Check for the exit code (if allowed)
+        if allow_exit and response == "xxx":
             return response
 
         try:
-            # Change the response to an
-            # integer and check that it's more than zero
-            response = float(response)
-
+            response = float(response)  # Try to turn input into a number
             if response > 0:
-                return response
+                return response  # Valid input
             else:
-                print(error)
-
+                print(error)  # Number is not more than zero
         except ValueError:
-            print(error)
+            print(error)  # Input wasn't a number
 
 # Main routine goes here
 
+# Instructions
 show_instructions = yes_no("Do you want to read the instructions")
 if show_instructions == "yes":
     instructions()
@@ -92,6 +97,27 @@ if show_instructions == "yes":
 # Using numb_check instead of direct float conversion
 budget = numb_check("Enter your budget ($): ")
 
+# Ask the user what they want to convert
+print("What do you want to convert?")
+print("Type 'g' for grams to kilograms")
+print("Type 'ml' for millilitres to litres")
+choice = input("Enter your choice: ").lower()
+
+# Do the correct conversion based on the user's choice
+if choice == 'g':
+    grams = float(input("Enter the number of grams: "))
+    kg = grams_to_kg(grams)
+    print(f"{grams} grams is {kg} kilograms.")
+
+elif choice == 'ml':
+    ml = float(input("Enter the number of millilitres: "))
+    litres = ml_to_litres(ml)
+    print(f"{ml} millilitres is {litres} litres.")
+
+else:
+    print("Sorry, that wasn't a valid choice. Please enter 'g' or 'ml'.")
+
+# Price comparison/unit price
 items = []
 while True:
     name = input("\nEnter item name (or 'done' to finish): ").lower()
