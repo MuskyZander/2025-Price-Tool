@@ -24,7 +24,7 @@ def instructions():
         The tool will ask you for:
         - Your shopping budget
         - Item names
-        - Weights (in grams)
+        - Weight (in grams)
         - Costs (in dollars)
 
         You can enter as many items as you want.
@@ -130,23 +130,50 @@ while True:
         weight_kg = grams_to_kg(weight_g)
         unit_price = calculate_unit_price(weight_kg, cost)
 
-        items.append({
-            'name': name,
-            'weight_g': weight_g,
-            'weight_kg': weight_kg,
-            'cost': cost,
-            'unit_price': unit_price
-        })
+# --- Item Details ---
+names = ["Apples", "Bananas", "Carrots"]
+weight_g = [500, 1000, 750]     # weight in grams
+costs = [3.50, 2.80, 4.20]      # cost in dollars
 
-print("\n📋 Comparison Results:")
-print("{:<15} {:>10} {:>10} {:>10} {:>15}".format("Item", "Weight (g)", "Weight (kg)", "Cost ($)",
-                                                  "Unit Price ($/kg)"))
-print("-" * 60)
-for item in items:
-    print("{:<15} {:>10.1f} {:>10.3f} {:>10.2f} {:>15.2f}".format(
-        item['name'], item['weight_g'], item['weight_kg'], item['cost'], item['unit_price']
-    ))
+# --- Convert grams to kilograms ---
+weight_kg = [w / 1000 for w in weight_g]
 
+# --- Calculate unit price ($ per kg) ---
+unit_price = [cost / kg for cost, kg in zip(costs, weight_kg)]
+
+# --- Store in dictionary ---
+items_dict = {
+    "Item": names,
+    "Weight (g)": weight_g,
+    "Weight (kg)": weight_kg,
+    "Cost ($)": costs,
+    "Unit Price ($/kg)": unit_price
+}
+
+# --- Show the results ---
+import pandas as pd
+
+items_table = pd.DataFrame(items_dict)
+
+# --- Sort by Unit Price (cheapest first) ---
+items_table = items_table.sort_values(by="Unit Price ($/kg)")
+
+# --- Reset index for clean output ---
+items_table = items_table.reset_index(drop=True)
+
+# --- Print the table ---
+print(items_table)
+
+# --- Show the best value item ---
+best_value = items_table.iloc[0]
+print(f"\n✅ Best value: {best_value['Item']} at ${best_value['Unit Price ($/kg)']:.2f} per kg")
+
+print("\n📋 Price Comparison Table:")
+print(items_table)
+
+# --- Total cost ---
+total = sum(costs)
+print(f"\n💰 Total Cost: ${total:.2f}")
 if items:
     # Find the cheapest item manually
     best_item = items[0]
