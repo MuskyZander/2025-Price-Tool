@@ -155,15 +155,6 @@ import pandas as pd
 
 items_table = pd.DataFrame(items_dict)
 
-# --- Sort by Unit Price (cheapest first) ---
-items_table = items_table.sort_values(by="Unit Price ($/kg)")
-
-# --- Reset index for clean output ---
-items_table = items_table.reset_index(drop=True)
-
-# --- Print the table ---
-print(items_table)
-
 # --- Show the best value item ---
 best_value = items_table.iloc[0]
 print(f"\n✅ Best value: {best_value['Item']} at ${best_value['Unit Price ($/kg)']:.2f} per kg")
