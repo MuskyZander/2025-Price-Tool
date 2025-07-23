@@ -149,14 +149,14 @@ while True:
 
         # Check that weight and cost are in the right range
         if not (0 < weight <= 10000):
-            print("❌ Weight must be between 0 and 10,000 grams.")
+            print(" Weight must be between 0 and 10,000 grams.")
             continue
         if not (0 < cost <= 10000):
-            print("❌ Cost must be between $0 and $10,000.")
+            print(" Cost must be between $0 and $10,000.")
             continue
 
     except ValueError:
-        print("❌ Please enter numbers only for weight and cost.")
+        print("Please enter numbers only for weight and cost.")
         continue
 
     # Save the information to the lists
@@ -173,6 +173,7 @@ else:
 
     # 
    price_per_kg = []
+
  #this goes through the items in your list one at a time gets the cost weight,price,and rounds the price to 2 decimal places
 for i in range(len(costs_dollars)):
     cost = costs_dollars[i]
