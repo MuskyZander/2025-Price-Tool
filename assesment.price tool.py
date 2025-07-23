@@ -130,42 +130,81 @@ while True:
         weight_kg = grams_to_kg(weight_g)
         unit_price = calculate_unit_price(weight_kg, cost)
 
-# --- Item Details ---
-names = ["Apples", "Bananas", "Carrots"]
-weight_g = [500, 1000, 750]     # weight in grams
-costs = [3.50, 2.80, 4.20]      # cost in dollars
+import pandas as pd  # Used to create a nice table
 
-# --- Convert grams to kilograms ---
-weight_kg = [w / 1000 for w in weight_g]
+# --- Empty lists to store item info ---
+item_names = []
+weights_grams = []
+costs_dollars = []
 
-# --- Calculate unit price ($ per kg) ---
-unit_price = [cost / kg for cost, kg in zip(costs, weight_kg)]
+# --- Ask the user to enter item info ---
+while True:
+    name = input("Enter item name (or 'done' to finish): ")
+    if name.lower() == "done":
+        break
 
-# --- Store in dictionary ---
-items_dict = {
-    "Item": names,
-    "Weight (g)": weight_g,
-    "Weight (kg)": weight_kg,
-    "Cost ($)": costs,
-    "Unit Price ($/kg)": unit_price
-}
+    try:
+        weight = float(input("Enter weight in grams (0 - 10000): "))
+        cost = float(input("Enter cost in dollars (0 - 10000): "))
 
-# --- Show the results ---
-import pandas as pd
+        # Check that weight and cost are in the right range
+        if not (0 < weight <= 10000):
+            print("❌ Weight must be between 0 and 10,000 grams.")
+            continue
+        if not (0 < cost <= 10000):
+            print("❌ Cost must be between $0 and $10,000.")
+            continue
 
-items_table = pd.DataFrame(items_dict)
+    except ValueError:
+        print("❌ Please enter numbers only for weight and cost.")
+        continue
 
-# --- Show the best value item ---
-best_value = items_table.iloc[0]
-print(f"\n✅ Best value: {best_value['Item']} at ${best_value['Unit Price ($/kg)']:.2f} per kg")
+    # Save the information to the lists
+    item_names.append(name)
+    weights_grams.append(weight)
+    costs_dollars.append(cost)
 
-print("\n📋 Price Comparison Table:")
-print(items_table)
+# --- Check if any items were entered ---
+if len(item_names) == 0:
+    print("No items entered.")
+else:
+    # Convert grams to kilograms and round to 2 decimal places
+    weights_kg = [round(g / 1000, 2) for g in weights_grams]
 
-# --- Total cost ---
-total = sum(costs)
-print(f"\n💰 Total Cost: ${total:.2f}")
-if items:
+    # 
+   price_per_kg = []
+ #this goes through the items in your list one at a time gets the cost weight,price,and rounds the price to 2 decimal places
+for i in range(len(costs_dollars)):
+    cost = costs_dollars[i]
+    weight = weights_kg[i]
+    price = cost / weight
+    price_per_kg.append(round(price, 2))
+
+    # Create a table (DataFrame)
+    table_data = {
+        "Item": item_names,
+        "Weight (g)": weights_grams,
+        "Weight (kg)": weights_kg,
+        "Cost ($)": costs_dollars,
+        "Price per kg ($)": price_per_kg
+    }
+
+    # Make the table and sort it
+    table = pd.DataFrame(table_data)
+    
+    #This line sorts the table from cheapest to most expensive 
+    table = table.sort_values(by="Price per kg ($)")
+    
+    # It resets the row numbers etc by dropping row 1,2,3
+    table = table.reset_index(drop=True)
+
+    # Show the table
+    print("\n📋 Price Comparison Table:")
+    print(table)
+
+    # Show the best-value item
+    print(f"\n✅ Best value: {best_item['Item']} at ${best_item['Price per kg ($)']:.2f} per kg")
+
     # Find the cheapest item manually
     best_item = items[0]
     for item in items:
