@@ -1,7 +1,7 @@
 from locale import currency
 import pandas as pd  # Used to create a nice formatted table
 
-# --- Functions ---
+#  Functions go here
 
 def make_statements(statement, decoration):
     """Adds decoration around a heading to make it stand out"""
@@ -73,7 +73,7 @@ def numb_check(prompt, allow_exit=True, min_value=0, max_value=10000):
         except ValueError:
             print("Please enter a valid number.")
 
-# --- Main routine starts here ---
+#  Main routine starts here
 
 # Ask if user wants instructions
 show_instructions = yes_no("Do you want to read the instructions? ")
@@ -83,7 +83,7 @@ if show_instructions == "yes":
 # Ask for shopping budget (between 0 and 100)
 budget = numb_check("Enter your budget between 0 and 100 ($): ", min_value=0, max_value=100)
 
-# --- Quick conversion tool for grams or millilitres ---
+# Quick conversion tool for grams or millilitres
 choice = input("What do you want to convert? Type 'g' for grams to kilograms or 'ml' for millilitres to litres: ").lower()
 if choice == 'g':
     grams = float(input("Enter the number of grams: "))
@@ -144,6 +144,7 @@ else:
     price_per_kg = []
 
     # Calculate unit price for each item
+
     # Go through each item in the list using its position number
     for i in range(len(costs_dollars)):
 
@@ -153,7 +154,7 @@ else:
         # Rounds the price per kg to 2 decimal points
         price_per_kg.append(round(price, 2))
 
-    # Make a DataFrame (table) to display items
+    # Make a DataFrame table to display items
     table_data = {
         "Item": item_names,
         "Weight (g)": weights_grams,
@@ -162,7 +163,7 @@ else:
         "Price per kg ($)": price_per_kg
     }
 
-    # gets the list of each item so it can be displayed in a table format
+    # gets the list of each item so it can be displayed in a table format using pandas
     table = pd.DataFrame(table_data)
 
     # Show table
